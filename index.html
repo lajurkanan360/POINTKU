@@ -43,7 +43,7 @@ button:disabled{opacity:.4}
 
   <!-- Tampilan pelanggan -->
   <section id="cust">
-    <div class="row"><input id="cphone" placeholder="No. HP" inputmode="tel"><input id="cpin" placeholder="PIN" inputmode="numeric" maxlength="4" type="password"></div>
+    <div class="row"><input id="cphone" placeholder="No. HP kamu" inputmode="tel" autocomplete="off"></div>
     <div class="row"><button id="cek" style="flex:1">Lihat stamp saya</button></div>
   </section>
 
@@ -51,8 +51,8 @@ button:disabled{opacity:.4}
   <section id="kasir" class="hide">
     <div class="row" id="login"><input id="apin" placeholder="PIN kasir" type="password"><button id="enter">Masuk</button></div>
     <div id="kform" class="hide">
-      <div class="row"><input id="kphone" placeholder="No. HP" inputmode="tel"><input id="kname" placeholder="Nama (pelanggan baru)"></div>
-      <div class="row"><input id="kpin" placeholder="PIN 4 digit (pelanggan baru)" inputmode="numeric" maxlength="4"><button id="kfind">Cari / Tambah</button></div>
+      <div class="row"><input id="kphone" placeholder="No. HP" inputmode="tel"><input id="kname" placeholder="Nama (khusus pelanggan baru)"></div>
+      <div class="row"><button id="kfind" style="flex:1">Cari / Tambah</button></div>
     </div>
   </section>
 
@@ -60,9 +60,9 @@ button:disabled{opacity:.4}
   <ul class="list" id="list"></ul>
 </main>
 <script>
-// Isi dengan URL Web App dari Apps Script (Deploy > Manage deployments)
+// Isi dengan URL Web App dari Apps Script
 var API_URL = 'https://script.google.com/macros/s/AKfycbwTMzpZ4vdVS7koKpyRZtxqa5-RHeyOUPZedjV1NuMpOwTBytpHBZiUn2_Sk_qM_IxUow/exec';
-var SHOP = 'Kedai Kopi';
+var SHOP = 'AHASSKU';
 
 var $ = function (id) { return document.getElementById(id); };
 var admin = '', isKasir = location.search.indexOf('kasir') > -1;
@@ -129,15 +129,15 @@ if (isKasir) {
     });
   };
   $('kfind').onclick = function () {
-    api({ action: 'add', phone: $('kphone').value, name: $('kname').value, pin: $('kpin').value }).then(function (d) {
+    api({ action: 'add', phone: $('kphone').value, name: $('kname').value }).then(function (d) {
       if (!d) return;
-      if (d.isNew) { flash('Pelanggan baru dibuat. Beri tahu pelanggan PIN-nya.'); loadList(); }
+      if (d.isNew) { flash('Pelanggan baru dibuat.'); loadList(); }
       draw(d);
     });
   };
 } else {
   $('cek').onclick = function () {
-    api({ action: 'cek', phone: $('cphone').value, pin: $('cpin').value }).then(function (d) { if (d) draw(d); });
+    api({ action: 'cek', phone: $('cphone').value }).then(function (d) { if (d) draw(d); });
   };
 }
 </script>
